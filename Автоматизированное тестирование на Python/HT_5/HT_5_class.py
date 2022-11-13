@@ -18,8 +18,9 @@ class Shape:
         print('Невозможно посчитать')
 
 class Round(Shape):
-    # def __init__(self):
-    #     super(Round, self).__init__(a)
+    def __init__(self):
+        super(Round, self).__init__()
+        self.a = 5
 
     def square(self, a):
         square = math.pi * float(a) ** 2
@@ -35,7 +36,7 @@ class Triangle(Shape):
 
     def square(self, a, b, c):
         p = (a + b + c) / 2
-        square = p * (p - a) * (p - b) * (p - c)
+        square = (p * (p - a) * (p - b) * (p - c)) ** 0.5
         return square
 
 class Rectangle(Shape):
@@ -52,8 +53,20 @@ def test_square_round():
     x = Round()
     assert x.square(4) == float(math.pi * 4 ** 2)
 
+def test_square_quadrate():
+    x = Quadrate()
+    assert x.square(4) == float(4 ** 2)
+
+def test_square_triangle():
+    x = Triangle()
+    assert x.square(3, 4, 5) == float(6)
+
 if __name__ == '__main__':
     shape_1 = Round()
     print(shape_1.square(4))
     shape_2 = Rectangle()
     print(shape_2.square(4, 5))
+    shape_3 = Quadrate()
+    print(shape_3.square(4))
+    shape_4 = Triangle()
+    print(shape_4.square(3, 4, 5))
