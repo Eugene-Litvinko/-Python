@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import contextlib
 import time
+import requests
 
 WORD = 'Пылесос'
 class PageObject:
@@ -48,6 +49,9 @@ class HeaderPage(PageObject):
 
     def enter_search_word(self, word):
         self.driver.find_element(By.XPATH, self.search_string_locator).send_keys(word)
+    def search(self):
+        iframe = self.driver.find_element(By.TAG_NAME, 'iframe')
+        self.driver.switch_to.frame(iframe)
 
 
 class MainPage(PageObject):
@@ -59,16 +63,22 @@ class MainPage(PageObject):
 class FooterPage:
     pass
 
-def test_header_click():
+def header_click():
     header_click_catalog = HeaderPage()
     header_click_catalog.click_button(header_click_catalog.button_news_locator)
-    return print('тест успешен')
+    time.sleep(2)
+    try:
+        assert header_click_catalog.driver.current_url == 'https://www.onliner.by/'
+        return print('тест успешен')
+    except:
+        return print('тест провален')
 
-def test_search():
+def search():
     search_word = HeaderPage()
     search_word.enter_search_word(WORD)
     time.sleep(10)
-    #search_word.click_button(search_word.first_product_button_locator)
+    search_word.search()
+    search_word.click_button(search_word.first_product_button_locator)
     PageObject.driver.quit()
     return print('тест_2 успешно')
 
@@ -79,9 +89,9 @@ if __name__ == '__main__':
     #driver = webdriver.Chrome(executable_path = "C:\\Users\\kat1k\\Downloads\\chromedriver_win32\\chromedriver.exe")
     #driver.get(PageObject.url)
 
-    test_header_click()
+    header_click()
     PageObject.driver.get(PageObject.url)#сделал так запуск с начального места второго теста
-    test_search()
+    search()
 
     #search_word.click_button(search_word.first_product_button_locator)
 
